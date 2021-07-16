@@ -38,14 +38,25 @@ router.put("/workouts/:id", (req,res)=>{
         }, 
         // return the updated value afterwards
         { new: true}
-    ).then(dbPizzaData=>{
-        res.json(dbPizzaData);
+    ).then(dbTransaction=>{
+        res.json(dbTransaction);
     })
 })
 
 
+router.post("/workouts", (req,res)=>{
+    db.Workout.create(req.body)
+    .then(dbTransaction => {
+        res.json(dbTransaction);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });    
+})
 
-
+router.get("/workouts/range", (req,res) =>{
+    
+})
 
 
 
