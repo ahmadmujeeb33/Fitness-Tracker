@@ -18,8 +18,8 @@ router.get("/workouts", (req, res) => {
             }
         }
     ])
-    .then(dbPizzaData=>{
-        res.json(dbPizzaData);
+    .then(dbTransaction=>{
+        res.json(dbTransaction);
     })
     
 })
@@ -55,12 +55,22 @@ router.post("/workouts", (req,res)=>{
 })
 
 router.get("/workouts/range", (req,res) =>{
-    
+    db.Workout.aggregate([
+        {
+            $addFields: {
+                totalDuration: {
+                    $sum: "$exercises.duration"
+                }
+            }
+        }
+    ]).sort({ _id: -1}).limit(7)
+    .then(dbTransaction => {
+        res.json(dbTransaction);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      });    
 })
-
-
-
-
 
 
 module.exports = router;
